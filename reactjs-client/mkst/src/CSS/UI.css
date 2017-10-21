@@ -93,11 +93,18 @@ button:disabled {
 }
 
 .story-textarea {
-    width:100%;
+    text-align: left;
+    width: calc(100% - 24px);
     resize: none;
     font-size: larger;
-    border: solid #3d3d3d 1px;
-    border-radius: 3px;
+    padding-left:10px;
+    padding-right: 10px;
+    padding-top:10px;
+    padding-bottom: 10px;
+    margin-bottom:10px;
+    border-radius: 4px;
+    border:solid #3f48cc 2px;
+    box-shadow: 0px 4px 2px lightgrey;
 }
 
 .hidden {

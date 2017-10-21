@@ -4,9 +4,9 @@ import ReactDOM from 'react-dom';
 // import { Switch, BrowserRouter, Route } from 'react-router-dom';
 // import JoinGame from './JoinGame.js';
 //import Lobby from './Lobby.js';
-import './index.css';
+import './CSS/index.css';
 import registerServiceWorker from './registerServiceWorker';
-import MainWrapper from './MainWrapper.js';
+import MainWrapper from './Components/MainWrapper.js';
 
 // ReactDOM.render(<App />, document.getElementById('root'));
 // registerServiceWorker();

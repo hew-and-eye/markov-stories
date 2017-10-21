@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 //import { withRouter } from 'react-router';
-import logo from './logo.svg';
-import './App.css';
-import './UI.css';
+//import logo from './logo.svg';
+import '../CSS/App.css';
+import '../CSS/UI.css';
 import $ from 'jquery'
-import DataHolder from './dataholder.js';
 
 let gameNameRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9-_]+[a-zA-Z0-9]+$/;
 let gameNameRegexShort = /^[a-zA-Z0-9]+$/;
@@ -25,10 +24,10 @@ class JoinGame extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
+        {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Markov Stories</h1>
-        </header>
+        </header> */}
         <div className="ui-elem-holder">
           <input
             type="text"
@@ -51,18 +50,6 @@ class JoinGame extends Component {
             </button>
           </Link>
         </div>
-        {/* <div className="ui-elem-holder">
-          <input 
-            className="room-search-input" 
-            type="text" 
-            value={this.state.gameId}
-            onChange={ this.handleChange.bind(this) }
-            placeholder="Enter game code" />
-          <span 
-            className="room-search-button"
-            onClick={ this.handleClick.bind(this) } >
-            search</span>
-        </div> */}
       </div>
     );
   }
@@ -76,7 +63,7 @@ class JoinGame extends Component {
         dataType: 'json',
         success: function (data) {
           //console.log(context.props.updateGameData);
-          context.props.updateGameData(context.props.gameId, data.prompt);
+          context.props.updateGameData(context.props.gameId, data.prompt, data.new_story);
           context.setState({ joinLinkRoute: "/game" });
           // else context.setState({ joinLinkRoute: "/game" });
           context.setState({ disableJoin: false });
@@ -91,7 +78,6 @@ class JoinGame extends Component {
   handleChange(e) {
     // update state with input value
     this.setState({ gameId: e.target.value, joinLinkRoute: "/" });
-    DataHolder.gameName = e.target.value;
     let context = this;
     // check if name is valid
     if (gameNameRegex.test(e.target.value) || gameNameRegexShort.test(e.target.value)) {
@@ -102,7 +88,7 @@ class JoinGame extends Component {
         type: 'post',
         dataType: 'json',
         success: function (data) {
-          if (data.prompt === "true")
+          if (data.exists === true)
             context.setState({ buttonPrompt: "game exists: click to join", joinLinkRoute: "/game" });
           else context.setState({ buttonPrompt: "create a game", joinLinkRoute: "/game" });
           context.setState({ disableJoin: false });
@@ -112,6 +98,11 @@ class JoinGame extends Component {
         }
       });
     } else context.setState({ disableJoin: true, displayInvalidNamePrompt: "" });
+    /*
+     * This is the stuff for using the Fetch API, which would be better than JQuery in this instance,
+     * since importing all of JQuery is overkill since I'm only using it for AJAX,
+     * but I'm prioritizing feature completion for now.
+     */ 
     // console.log(document.getElementById("invalid-message").classList);
     // let checkConfig = {
     //   method: 'GET',
