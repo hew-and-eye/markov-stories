@@ -17,6 +17,13 @@
 
 .App-title {
   font-size: 1.5em;
+  text-decoration: none !important;
+}
+
+a:-webkit-any-link {
+  color: white;
+  cursor: auto;
+  text-decoration: none;
 }
 
 .App-intro {

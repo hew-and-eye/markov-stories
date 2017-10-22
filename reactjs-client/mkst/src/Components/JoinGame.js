@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-//import { withRouter } from 'react-router';
-//import logo from './logo.svg';
+import $ from 'jquery'
+
 import '../CSS/App.css';
 import '../CSS/UI.css';
-import $ from 'jquery'
 
 let gameNameRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9-_]+[a-zA-Z0-9]+$/;
 let gameNameRegexShort = /^[a-zA-Z0-9]+$/;
@@ -17,22 +16,26 @@ class JoinGame extends Component {
       disableJoin: true,
       joinLinkRoute: '/',
       buttonPrompt: 'create a game',
-      displayInvalidNamePrompt: "hidden"
+      displayInvalidNamePrompt: "hidden",
+      author: ''
     }
     JoinGame.context = this;
   }
   render() {
     return (
       <div className="App">
-        {/* <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Markov Stories</h1>
-        </header> */}
+        <div className="ui-elem-holder">
+          <input
+            type="text"
+            value={this.state.author}
+            onChange={this.handleAuthorNameChange.bind(this)}
+            placeholder="Enter your name" />
+        </div>
         <div className="ui-elem-holder">
           <input
             type="text"
             value={this.state.gameId}
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleGameIdChange.bind(this)}
             placeholder="Enter game name" />
         </div>
         <div id="invalid-message" className={"ui-elem-holder " + this.state.displayInvalidNamePrompt}>
@@ -44,7 +47,7 @@ class JoinGame extends Component {
           <Link to={this.state.joinLinkRoute}>
             <button
               //onClick={this.props.handler}
-              onClick={this.handleClick.bind(this, this.state.gameId)}
+              onClick={this.handleClick.bind(this)}
               disabled={this.state.disableJoin} >
               {this.state.buttonPrompt}
             </button>
@@ -54,7 +57,7 @@ class JoinGame extends Component {
     );
   }
 
-  handleClick(e, gameId) {
+  handleClick(e) {
     let context = this;
     if (gameNameRegex.test(this.state.gameId) || gameNameRegexShort.test(this.state.gameId)) {
       $.ajax({
@@ -62,20 +65,22 @@ class JoinGame extends Component {
         type: 'post',
         dataType: 'json',
         success: function (data) {
-          //console.log(context.props.updateGameData);
-          context.props.updateGameData(context.props.gameId, data.prompt, data.new_story);
-          context.setState({ joinLinkRoute: "/game" });
-          // else context.setState({ joinLinkRoute: "/game" });
-          context.setState({ disableJoin: false });
+          context.props.updateGameData(context.state.gameId, data.prompt, data.new_story, context.state.author);
         }, error: function (data) {
           console.log("there was an error");
-          context.setState({ disableJoin: false });
         }
       });
     }
   }
 
-  handleChange(e) {
+  handleAuthorNameChange(e) {
+    this.setState({ author: e.target.value });
+    if (gameNameRegex.test(e.target.value) || gameNameRegexShort.test(e.target.value)) {
+      this.setState({ disableJoin: true, displayInvalidNamePrompt: "hidden", joinLinkRoute: "/game" });
+    } else this.setState({ disableJoin: true, displayInvalidNamePrompt: "", joinLinkRoute: "/" });
+  }
+
+  handleGameIdChange(e) {
     // update state with input value
     this.setState({ gameId: e.target.value, joinLinkRoute: "/" });
     let context = this;
@@ -97,12 +102,12 @@ class JoinGame extends Component {
           context.setState({ disableJoin: false });
         }
       });
-    } else context.setState({ disableJoin: true, displayInvalidNamePrompt: "" });
+    } else this.setState({ disableJoin: true, displayInvalidNamePrompt: "" });
     /*
      * This is the stuff for using the Fetch API, which would be better than JQuery in this instance,
      * since importing all of JQuery is overkill since I'm only using it for AJAX,
      * but I'm prioritizing feature completion for now.
-     */ 
+     */
     // console.log(document.getElementById("invalid-message").classList);
     // let checkConfig = {
     //   method: 'GET',

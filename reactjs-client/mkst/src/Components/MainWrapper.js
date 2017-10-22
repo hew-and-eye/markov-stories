@@ -15,6 +15,8 @@ class MainWrapper extends Component {
         this.state = {
             gameId: '',
             storyPrompt: '',
+            author: '',
+            newStory: false
         }
         JoinGame.context = this;
         this.updateGameData = this.updateGameData.bind(this);
@@ -22,9 +24,9 @@ class MainWrapper extends Component {
     }
     render() {
         return (
-            <div>
-                <Header />
-                <BrowserRouter>
+            <BrowserRouter>
+                <div>
+                    <Header />
                     <Switch>
                         <Route exact path="/">
                             <JoinGame updateGameData={this.updateGameData}></JoinGame>
@@ -34,16 +36,18 @@ class MainWrapper extends Component {
                                 ref={(lobby) => { this.lobby = lobby; }}
                                 updateGameData={this.updateGameData}
                                 newStory={this.state.newStory}
-                                storyPrompt={this.state.storyPrompt}></Lobby>
+                                storyPrompt={this.state.storyPrompt}
+                                gameId={this.state.gameId}
+                                author={this.state.author} ></Lobby>
                         </Route>
                     </Switch>
-                </BrowserRouter>
-            </div>
+                </div>
+            </BrowserRouter>
         );
     }
-    updateGameData(id, prompt, isNewStory) {
+    updateGameData(id, prompt, isNewStory, author) {
         console.log("updating game data, newStory = " + isNewStory);
-        this.setState({ gameId: id, storyPrompt: prompt })
+        this.setState({ gameId: id, storyPrompt: prompt, author: author, newStory: isNewStory })
         if (isNewStory)
             this.lobby.setState({ displayTitleInput: "" });
         else this.lobby.setState({ displayTitleInput: "hidden" });

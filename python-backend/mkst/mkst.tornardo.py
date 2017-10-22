@@ -7,6 +7,8 @@ from mkst_request_handlers.CreateStoryHandler import CreateStoryHandler
 
 # just leaving this here just in case I need a stripped down request handler as an example
 class MainHandler(tornado.web.RequestHandler):
+    # I'll need these CORS headers on all the handlers 
+    # if I want to be able to access the server from a mobile app
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")

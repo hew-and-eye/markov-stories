@@ -4,6 +4,7 @@ import json
 from mkst_services.DataService import DataService
 
 class StoryListHandler(tornado.web.RequestHandler):
+    
     def set_default_headers(self):       
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-Control-Allow-Headers", "x-requested-with")
@@ -24,5 +25,4 @@ class StoryListHandler(tornado.web.RequestHandler):
         _response = DataService().getStoryList(args[0], args[1])
         self.write(json.dumps(_response))
         self.flush()
-        print("hit the post function")
         self.finish()
